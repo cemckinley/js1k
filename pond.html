@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+	<head>
+		<style type="text/css">
+			body{
+				padding: 0;
+				margin: 0;
+			}
+		</style>
+		<title>JS1k, 1k demo submission [ID]</title>
+		<meta charset="utf-8" />
+	</head>
+	<body>
+		<canvas id="c"></canvas>
+		<script>
+			var b = document.body;
+			var c = document.getElementsByTagName('canvas')[0];
+			var a = c.getContext('2d');
+			document.body.clientWidth; // fix bug in webkit: http://qfox.nl/weblog/218
+		</script>
+		<script>
+		// start of submission //
+
+			c.width=w=c.height=h=800;
+			c.style.background='#003';
+			a.fillStyle='#fff';
+
+			M=Math;
+			P=M.PI/180;
+
+			o=[];
+
+			//assign shortcodes to context properties
+			// inspired by Marijn Haverbeke's usage
+			for(x in a){
+				a[x[0]+(x[6]||x[2])]=a[x]
+			}
+			/*
+			commonly used shortcodes for this demo:
+			fc = fillRect
+			ce = clearRect
+			ac = arc
+			rc= rect
+			sv= save
+			re= restore
+			sa= scale
+			rt= rotate
+			ta= translate
+			ba = beginPath
+			mv= moveTo
+			ln= lineTo
+			fl= fill
+			sr= stroke
+			cL= createLinearGradient
+			cR= createRadialGradient
+			ci= clip
+			*/
+
+			// return a random number between b and b + n
+			function R(n,b){
+				return (M.random()*n)+b;
+			}
+		
+			// define starting 100 shapes
+			for(i=30;i;i--){
+				o[i] = {
+					r: R(55,5),
+					x: R(w,1),
+					y: R(h,1),
+					v: (R(1,0)<.5?-1:1) * R(9,1) / R(9,1)
+				};
+				O=o[i];
+				a.ba();
+				a.ac(O.x,O.y,O.r,0,P*2,true);
+				a.fl();
+			}
+
+		// end of submission //
+		</script>
+	</body>
+</html>

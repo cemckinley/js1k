@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+	<head>
+		<title>JS1k, 1k demo submission [ID]</title>
+		<meta charset="utf-8" />
+
+		<style type="text/css">
+			body{
+				padding: 0;
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="c"></canvas>
+		<script>
+			var b = document.body;
+			var c = document.getElementsByTagName('canvas')[0];
+			var a = c.getContext('2d');
+			document.body.clientWidth; // fix bug in webkit: http://qfox.nl/weblog/218
+		</script>
+		<script>
+		// start of submission //
+			c.width=w=c.height=h=600;
+			q='#000';
+			c.style.cssText='background:'+q+';cursor:pointer';
+			M=Math;
+			P=M.PI/180;
+			z=1;
+			
+			//assign shortcodes to context properties
+			// inspired by Marijn Haverbeke's usage
+			for(x in a){
+				a[x[0]+(x[6]||x[2])]=a[x]
+			}
+			/*
+			commonly used shortcodes for this demo:
+			fc = fillRect
+			ce = clearRect
+			ac = arc
+			rc= rect
+			sv= save
+			re= restore
+			sa= scale
+			rt= rotate
+			ta= translate
+			ba = beginPath
+			mv= moveTo
+			ln= lineTo
+			fl= fill
+			sr= stroke
+			cL= createLinearGradient
+			cR= createRadialGradient
+			ci= clip
+			*/
+			
+			a.sv();
+					
+			// starting triangle
+			a.ta(225,550);
+			function t(){
+				a.fillStyle='#fff';
+				a.ba();
+				a.ln(250*z,-433);
+				a.ln(0,-500);
+				a.ln(0,0);
+				a.fl()
+			}
+			t();
+		
+			// cut shapes out on user click
+			x=y=i=k=0;
+			A=[];
+			B=[];
+			a.strokeStyle='#666';
+			a.fillStyle=q;
+		
+			c.onclick=function(e){
+				with(a){
+					x=e.clientX-225;
+					y=e.clientY-550;
+					ba();
+					m=A[0];
+					n=A[1];
+					if(x>m-7&x<m+7&y>n-7&y<n+7){ // if click is on originating point, complete shape and fill polygon, store coordinates in array
+						mv(m,n);
+						for(j=0;j<A.length;j+=2){
+							ln(A[j],A[j+1])						
+						}
+						fl();
+						B[k]=A;
+						k++;
+						A=[]
+					}
+					
+					else if(A==0){ // if click is first in polygon (array is empty), start new
+						sr(ac(A[0]=x,A[1]=y,1,0,M.PI*2,0));
+						i=2
+					}
+			
+					else{ // add lines to current shape with each click
+						sr(ln(A[i-2],A[i-1]),ln(A[i]=x,A[i+1]=y));
+						i+=2
+					}
+				}
+			}
+		
+			//buttons
+				g='<button onclick="';
+				p='</button>';
+				document.write('<br>'+g+'F()">Make a Flake!'+p+' '+g+'window.location.reload()">Clear'+p);
+		
+			// redraw user's created shape on smaller scale from stored array, reflect/rotate/repeat into full-on snowflake
+			function F(){
+				a.re();
+				a.ce(0,0,h,w);
+				a.ta(w/2,h/2);
+				a.sa(.5,.5);
+				
+				setInterval(function(){ // slowly rotate completed snowflake, for a finishing touch
+					with(a){
+						ce(-h,-w,h*2,w*2);
+						rt(.15*P);
+						sv();
+			
+						for(m=0;m<2;m++){
+							z=(m==1)?-1:1; // reflect shape on second runthrough by multiplying x-coordinates by -1
+							for(n=0;n<6;n++){
+								rt(60*P); // rotate
+								t(); //draw triangle
+								sv();
+								for(j in B){
+									fillStyle=q;
+									ba();
+									for(l=0;l<B[j].length;l+=2){ // redraw user's shapes
+										ln(B[j][l]*z,B[j][l+1])						
+									}
+									fl()
+								}
+								re()
+							}
+						}
+						
+						re()
+					}
+				},30)
+			
+			}
+
+
+			// MIN SOURCE
+			/*
+			c.width=w=c.height=h=600;q="#000";c.style.cssText="background:"+q+";cursor:pointer";M=Math;P=M.PI/180;z=1;for(x in a)a[x[0]+(x[6]||x[2])]=a[x];a.sv();a.ta(225,550);function t(){a.fillStyle="#fff";a.ba();a.ln(250*z,-433);a.ln(0,-500);a.ln(0,0);a.fl()}t();x=y=i=k=0;A=[];B=[];a.strokeStyle="#666";a.fillStyle=q; c.onclick=function(b){with(a){x=b.clientX-225;y=b.clientY-550;ba();m=A[0];n=A[1];if(x>m-7&x<m+7&y>n-7&y<n+7){mv(m,n);for(j=0;j<A.length;j+=2)ln(A[j],A[j+1]);fl();B[k]=A;k++;A=[]}else if(A==0){sr(ac(A[0]=x,A[1]=y,1,0,M.PI*2,0));i=2}else{sr(ln(A[i-2],A[i-1]),ln(A[i]=x,A[i+1]=y));i+=2}}};g='<button onclick="';p="</button>";document.write("<br>"+g+'F()">Make a Flake!'+p+" "+g+'window.location.reload()">Clear'+p); function F(){a.re();a.ce(0,0,h,w);a.ta(w/2,h/2);a.sa(0.5,0.5);setInterval(function(){with(a){ce(-h,-w,h*2,w*2);rt(0.15*P);sv();for(m=0;m<2;m++){z=m==1?-1:1;for(n=0;n<6;n++){rt(60*P);t();sv();for(j in B){fillStyle=q;ba();for(l=0;l<B[j].length;l+=2)ln(B[j][l]*z,B[j][l+1]);fl()}re()}}re()}},30)};
+			*/
+
+		// end of submission //
+		</script>
+	</body>
+</html>
